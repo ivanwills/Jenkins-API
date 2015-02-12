@@ -32,7 +32,7 @@ has '_client' => (
         $client->setHost($self->base_url);
         if (defined($self->api_key) and defined($self->api_pass)) {
             $client->addHeader("Authorization", "Basic " .
-                               encode_base64($self->api_key . ':' . $self->api_pass)); 
+                               encode_base64($self->api_key . ':' . $self->api_pass));
         }
         return $client;
     }
@@ -40,7 +40,7 @@ has '_client' => (
 
 =head1 SYNOPSIS
 
-This is a wrapper around the Jenkins API.  
+This is a wrapper around the Jenkins API.
 
     use Jenkins::API;
 
@@ -67,7 +67,7 @@ if necessary.
 
 =head2 base_url
 
-This is the base url for your jenkins installation.  This is commonly 
+This is the base url for your jenkins installation.  This is commonly
 running on port 8080 so it's often something like http://jenkins:8080
 
 =head2 api_key
@@ -112,7 +112,7 @@ It returns the version number of the Jenkins server if it is running.
     
 =head2 current_status
 
-Returns the current status of the server as returned by the API.  This 
+Returns the current status of the server as returned by the API.  This
 is a hash containing a fairly comprehensive list of what's going on.
 
     $jenkins->current_status();
@@ -148,7 +148,7 @@ is a hash containing a fairly comprehensive list of what's going on.
     #   ]
     # }
 
-It is also possible to pass two parameters to the query to refine or 
+It is also possible to pass two parameters to the query to refine or
 expand the data you get back.  The tree parameter allows you to select
 specific elements. The example from the Jenkins documentation , C<< tree=> 'jobs[name],views[name,jobs[name]]' >> demonstrates the syntax nicely.
 
@@ -169,12 +169,12 @@ it higher it dumps a ton of data.
     # returns everything and the kitchen sink.
 
 It is also possible to only look at a subset of the data.  Most urls
-you can see on the website in Jenkins can be accessed.  If you have a 
+you can see on the website in Jenkins can be accessed.  If you have a
 job named Test-Project for example with the url C</job/Test-Project> you
 can specify the C<< path_parts => ['job', 'Test-Project'] >> to look at the
 data for that job alone.
 
-    $jenkins->current_status({ 
+    $jenkins->current_status({
         path_parts => [qw/job Test-Project/],
         extra_params => { depth => 1 },
     });
@@ -555,7 +555,7 @@ sub general_call
 
 =head2 response_code
 
-This method returns the HTTP response code from our last request to 
+This method returns the HTTP response code from our last request to
 the Jenkins server.  This may be useful when an error occurred.
 
 =cut
@@ -568,8 +568,8 @@ sub response_code
 
 =head2 response_content
 
-This method returns the content of the HTTP response from our 
-last request to the Jenkins server.  This may be useful when 
+This method returns the content of the HTTP response from our
+last request to the Jenkins server.  This may be useful when
 an error occurrs.
 
 =cut
@@ -588,9 +588,9 @@ the root path.  I don't actually know if that's an install option, but
 the internal url building just doesn't deal with that situation properly.
 If you want that fixing a patch is welcome.
 
-Please report any bugs or feature requests to through the web interface 
-at L<https://github.com/colinnewell/Jenkins-API/issues/new>.  I will 
-be notified, and then you'll automatically be notified of progress 
+Please report any bugs or feature requests to through the web interface
+at L<https://github.com/colinnewell/Jenkins-API/issues/new>.  I will
+be notified, and then you'll automatically be notified of progress
 on your bug as I make changes.
 
 
