@@ -13,6 +13,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use FindBin qw/$Bin/;
 use Jenkins::API;
+use Term::ANSIColor qw/colored/;
 
 our $VERSION = version->new('0.0.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
@@ -88,11 +89,21 @@ sub ls { shift->list(@_) }
 sub list {
     my ($self, $jenkins, $opt, $query) = @_;
 
-    my $data = $jenkins->_json_api([qw/api json/], { extra_params => { depth => 0 } });
+    my $data = $jenkins->_json_api([qw/api json/], { extra_params => { depth => 1 } });
 
     for my $job (sort @{ $data->{jobs} }) {
         next if $query && $job->{name} !~ /$query/;
-        print "$job->{name}\n";
+        my $name = $job->{name};
+        if ( $job->{color} =~ s/_anime// ) {
+            $name .= ' *';
+        }
+        if ( $job->{color} eq 'aborted' ) {
+            $job->{color} = 'grey18';
+        }
+        if ( $job->{color} eq 'disabled' ) {
+            $job->{color} = 'grey22';
+        }
+        print colored([$job->{color}], $name), "\n";
     }
 
     return;
