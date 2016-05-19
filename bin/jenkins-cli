@@ -31,8 +31,9 @@ sub main {
                 test => 0,
             },
             sub_command => [
-                ls   => [],
-                list => [],
+                ls    => [],
+                list  => [],
+                start => [],
                 create_job                    => [
                 ],
                 delete_project                => [
@@ -94,8 +95,10 @@ sub list {
     for my $job (sort @{ $data->{jobs} }) {
         next if $query && $job->{name} !~ /$query/;
         my $name = $job->{name};
+        my $extra = '';
+
         if ( $job->{color} =~ s/_anime// ) {
-            $name .= ' *';
+            $extra = '*';
         }
         if ( $job->{color} eq 'aborted' ) {
             $job->{color} = 'grey18';
@@ -103,10 +106,27 @@ sub list {
         if ( $job->{color} eq 'disabled' ) {
             $job->{color} = 'grey22';
         }
-        print colored([$job->{color}], $name), "\n";
+        print colored([$job->{color}], $name), " $extra\n";
     }
 
     return;
+}
+
+sub start {
+    my ($self, $jenkins, $opt, $job, @extra) = @_;
+    _error("Must start build with job name!\n") if !$job;
+
+    my $result = $jenkins->trigger_build($job);
+    warn Dumper $result;
+
+    return;
+}
+
+sub _error {
+    my ($msg) = @_;
+
+    warn $msg;
+    exit 1;
 }
 
 __DATA__
